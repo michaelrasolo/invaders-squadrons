@@ -17,28 +17,40 @@ let keys = {
 
 //============= DRAWING THE PLAYER =============//
 const player = new Player(canvas);
-const lasers = [];
 
+const grids = [new Grid(canvas)];
+const playerLasers = [];
 function animate() {
   //   CLEAR THE CANVA
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   requestAnimationFrame(animate);
   //====   PLAYER ANIMATION ====//
-  //   Player direction
+  //   Draw and move Player
   for (const direction in keys) {
     if (keys[direction].active) {
       player.move(direction);
     }
   }
   player.draw();
+
   //   Player shooting
-  lasers.forEach((laser, i) => {
+  playerLasers.forEach((laser, i) => {
     if (laser.position.y <= 0) {
-      lasers.splice(i, 1);
+      playerLasers.splice(i, 1);
     } else {
       laser.shoot();
     }
   });
+
+  //====   GRID ANIMATION ====//
+  // Draw enemies grid  
+  grids.forEach((grid)=> {
+    grid.move()
+    grid.enemies.forEach(enemy => {
+        enemy.draw()
+        enemy.move(grid.velocity)
+    })
+  })
 }
 
 animate();
@@ -61,8 +73,8 @@ document.addEventListener("keydown", (event) => {
       break;
     //   SHOOTING
     case "Space":
-        console.log(lasers);
-      lasers.push(
+      console.log(playerLasers);
+      playerLasers.push(
         new Laser(
           canvas,
           { position: { x: player.position.x + 4, y: player.position.y } },
@@ -70,7 +82,7 @@ document.addEventListener("keydown", (event) => {
           "up"
         )
       );
-      lasers.push(
+      playerLasers.push(
         new Laser(
           canvas,
           {

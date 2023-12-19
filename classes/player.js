@@ -2,18 +2,14 @@ class Player {
   constructor(canvas) {
     this.canvas = canvas
     this.ctx = canvas.getContext("2d")
-    this.velocity = {
-      x: 0,
-      y: 0,
-    };
     this.speed = 5;
     this.loaded = false;
     const image = new Image();
-    image.src = "../assets/Player- Advanced X Wing.png";
+    image.src = "./assets/X Wing.png";
     image.onload = () => {
       const scale = 1;
       this.width = image.width * scale;
-      this.height = image.width * scale;
+      this.height = image.height * scale;
       this.loaded = true;
       this.image = image;
       this.position = {
@@ -25,7 +21,7 @@ class Player {
   }
 
   draw() {
-    this.loaded && ctx.drawImage(this.image, this.position.x, this.position.y);
+    this.loaded && this.ctx.drawImage(this.image, this.position.x, this.position.y);
   }
 
   move(direction) {
@@ -48,7 +44,7 @@ class Player {
         }
         break
       case "down":
-        if (this.position.y + this.height <= canvas.height) {
+        if (this.position.y + this.height +1<= canvas.height) {
           this.position.y += this.speed;
         }
         break
