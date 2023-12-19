@@ -7,7 +7,7 @@ class Laser {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.position = position;
-    this.speed = 10;
+    this.speed = 8;
     this.color = color;
     this.direction = direction;
   }
@@ -26,9 +26,20 @@ class Laser {
     this.ctx.closePath();
   }
 
-  move(direction){
-    if (direction === "up") {
-        
+  shoot() {
+    this.draw()
+    if (!this.position) return
+    switch (this.direction) {
+      case "up":
+        this.position.y -= this.speed;
+        break;
+
+      case "down":
+        this.position.y += this.speed;
+        break;
+
+      default:
+        break;
     }
   }
 }

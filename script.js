@@ -13,34 +13,40 @@ let keys = {
   right: { active: false },
   up: { active: false },
   down: { active: false },
-  space: { active: false },
 };
 
 //============= DRAWING THE PLAYER =============//
 const player = new Player(canvas);
-const lasers = [new Laser(canvas,{position:{x:300, y:300}},"red","up")]
+const lasers = [];
 
 function animate() {
   //   CLEAR THE CANVA
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   requestAnimationFrame(animate);
+  //====   PLAYER ANIMATION ====//
+  //   Player direction
   for (const direction in keys) {
     if (keys[direction].active) {
       player.move(direction);
     }
   }
   player.draw();
-  lasers.forEach(laser => {
-    laser.draw()
+  //   Player shooting
+  lasers.forEach((laser, i) => {
+    if (laser.position.y <= 0) {
+      lasers.splice(i, 1);
+    } else {
+      laser.shoot();
+    }
   });
 }
 
 animate();
 
-//============= MOVING THE PLAYER =============//
-// PRESSING THE KEY
+//============= KEY CONTROLLERS =============//
 document.addEventListener("keydown", (event) => {
   switch (event.code) {
+    // DIRECTION
     case "ArrowLeft":
       keys.left.active = true;
       break;
@@ -53,8 +59,30 @@ document.addEventListener("keydown", (event) => {
     case "ArrowDown":
       keys.down.active = true;
       break;
+    //   SHOOTING
     case "Space":
-      keys.space.active = true;
+        console.log(lasers);
+      lasers.push(
+        new Laser(
+          canvas,
+          { position: { x: player.position.x + 4, y: player.position.y } },
+          "red",
+          "up"
+        )
+      );
+      lasers.push(
+        new Laser(
+          canvas,
+          {
+            position: {
+              x: player.position.x + player.width - 4,
+              y: player.position.y,
+            },
+          },
+          "red",
+          "up"
+        )
+      );
       break;
 
     default:
@@ -64,7 +92,6 @@ document.addEventListener("keydown", (event) => {
 
 // RELEASING THE KEY
 document.addEventListener("keyup", (event) => {
-  //   console.log(event.code);
   switch (event.code) {
     case "ArrowLeft":
       keys.left.active = false;
@@ -78,10 +105,6 @@ document.addEventListener("keyup", (event) => {
     case "ArrowDown":
       keys.down.active = false;
       break;
-    case "Space":
-      keys.space.active = false;
-      break;
-
     default:
       break;
   }
