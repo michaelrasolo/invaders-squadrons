@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* background-color: black; */
+  color: whitesmoke;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: grey;
+}
+canvas {
+  border: 2px red solid;
+  width: 90vw;
+  height: 100vh;
+  padding: 2rem;
+  background-color: black;
+}
