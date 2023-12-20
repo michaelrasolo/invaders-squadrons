@@ -18,6 +18,6 @@ canvas {
   border: 2px red solid;
   width: 90vw;
   height: 100vh;
-  padding: 1rem 2rem;
+  /* padding: 1rem 2rem; */
   background-color: black;
 }

@@ -15,13 +15,19 @@ let keys = {
   down: { active: false },
 };
 
-//============= DRAWING THE PLAYER =============//
+// CREATE PLAYER
 const player = new Player(canvas);
-
-const grids = [new Grid(canvas)];
 const playerLasers = [];
+
+// CREATE GRID OF ENEMIES
+const grids = [new Grid(canvas)];
+let frames = 0;
+let randomGridInterval = Math.floor(Math.random() * 500 + 1000);
+
+// ================ ANIMATION FUNCTION ================ //
 function animate() {
-  //   CLEAR THE CANVA
+  // console.log(frames);
+  //   CLEAR THE CANVAS
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   requestAnimationFrame(animate);
   //====   PLAYER ANIMATION ====//
@@ -43,14 +49,61 @@ function animate() {
   });
 
   //====   GRID ANIMATION ====//
-  // Draw enemies grid  
-  grids.forEach((grid)=> {
-    grid.move()
-    grid.enemies.forEach(enemy => {
-        enemy.draw()
-        enemy.move(grid.velocity)
-    })
-  })
+  // Draw and move enemies grid
+  grids.forEach((grid, gridIndex) => {
+    const allEnemiesLoaded = grid.enemies.every((enemy) => enemy.loaded);
+
+    if (allEnemiesLoaded) {
+      grid.enemies.forEach((enemy, i) => {
+        enemy.draw();
+        enemy.move(grid.velocity);
+        // Remove hit enemies
+        playerLasers.forEach((playerLaser, j) => {
+          if (
+            // Y axis
+            playerLaser.position.y - 10 <= enemy.position.y + enemy.width && // Front of laser vs bottom enemy
+            playerLaser.position.y >= enemy.position.y && // Back of laser vs front of enemy
+            // X axis
+            playerLaser.position.x + 1 >= enemy.position.x && // Right of laser vs left of enemy
+            playerLaser.position.x - 1 <= enemy.position.x + enemy.width // Left of laser vs right of enemy
+          ) {
+            setTimeout(() => {
+              // Check if enemy & laser to splice are the same
+              const enemyFound = grid.enemies.find((enemy2) => {
+                return enemy2 === enemy;
+              });
+              const playerLaserFound = playerLasers.find((laser2) => {
+                return laser2 === playerLaser;
+              });
+              // Removing laser and enemy from arrays
+              if (playerLaserFound && enemyFound) {
+                grid.enemies.splice(i, 1);
+                playerLasers.splice(j, 1);
+
+                if (grid.enemies.length > 0) {
+                  const firstEnemy = grid.enemies[0];
+                  const lastEnemy = grid.enemies[grid.enemies.length - 1];
+
+                  grid.width =
+                    lastEnemy.position.x -
+                    firstEnemy.position.x +
+                    lastEnemy.width
+
+              grid.position.x = firstEnemy.position.x
+                } else {grids.splice(gridIndex,1)}
+              }
+            }, 0);
+          }
+        });
+      });
+
+      grid.move();
+    }
+    if (frames % randomGridInterval === 0 && frames != 0) {
+      grids.push(new Grid(canvas));
+    }
+  });
+  frames++;
 }
 
 animate();
@@ -73,7 +126,7 @@ document.addEventListener("keydown", (event) => {
       break;
     //   SHOOTING
     case "Space":
-      console.log(playerLasers);
+      // console.log(playerLasers);
       playerLasers.push(
         new Laser(
           canvas,

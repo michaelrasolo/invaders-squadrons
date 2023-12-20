@@ -17,7 +17,7 @@ class Laser {
     // Drawing
     this.ctx.beginPath();
     this.ctx.moveTo(this.position.x, this.position.y);
-    this.ctx.lineTo(this.position.x, this.position.y - 20);
+    this.ctx.lineTo(this.position.x, this.position.y - 10);
     this.ctx.lineWidth = 3;
     // Color condition
     this.ctx.strokeStyle = "red";

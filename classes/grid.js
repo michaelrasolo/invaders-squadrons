@@ -3,27 +3,42 @@ class Grid {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.position = { x: 0, y: 0 };
-    this.velocity = { x: 6, y: 0 };
+    this.velocity = { x: 1, y: 0 };
     this.enemies = [];
 
-    const rows = Math.ceil(Math.random() * 4);
+    const rows = Math.ceil(Math.random() * 4)+2;
     const columns = Math.ceil(Math.random() * 6 + 2);
-    this.width = columns * 60
+    this.width = (columns * 60)
     console.log(this.width,);
     for (let i = 0; i < columns; i++) {
       for (let j = 0; j < rows; j++) {
         this.enemies.push(
-          new Enemy(this.canvas, { position: { x: 60 * i, y: 53 * j } })
+          new Enemy(this.canvas, { position: { x: (i*60), y: j*60 } })
         );
       }
     }
   }
+  drawBorder() {
+    const borderThickness = 2;
+    this.ctx.strokeStyle = "green"; // Set border color
+    this.ctx.lineWidth = borderThickness;
+    this.ctx.strokeRect(
+      this.position.x - borderThickness,
+      this.position.y - borderThickness,
+      this.width + borderThickness * 2,
+      this.canvas.height - this.position.y + borderThickness
+    );
+  }
   move() {
+   this.drawBorder()
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
-    console.log(this.width + this.position.x, this.canvas.width);
+    this.velocity.y = 0
+    // console.log(this.width + this.position.x, this.canvas.width);
     if (this.position.x + this.width - 7 >= this.canvas.width ||this.position.x <= 0 ) {
-this.velocity.x *= -1
+this.velocity.x *= -1 
+this.velocity.y = 30 
+
     }
   }
 }
