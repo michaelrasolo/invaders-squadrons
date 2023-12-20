@@ -87,10 +87,12 @@ function animate() {
                   grid.width =
                     lastEnemy.position.x -
                     firstEnemy.position.x +
-                    lastEnemy.width
+                    lastEnemy.width;
 
-              grid.position.x = firstEnemy.position.x
-                } else {grids.splice(gridIndex,1)}
+                  grid.position.x = firstEnemy.position.x;
+                } else {
+                  grids.splice(gridIndex, 1);
+                }
               }
             }, 0);
           }
