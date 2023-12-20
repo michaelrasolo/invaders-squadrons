@@ -3,11 +3,11 @@ class Grid {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.position = { x: 0, y: 0 };
-    this.velocity = { x: 1, y: 0 };
+    this.velocity = { x: 3, y: 0 };
     this.enemies = [];
 
-    const rows = Math.ceil(Math.random() * 4)+2;
-    const columns = Math.ceil(Math.random() * 6 + 2);
+    const rows = Math.ceil(Math.random() * 3)+1;
+    const columns = Math.ceil(Math.random() * 4 + 2);
     this.width = (columns * 60)
     console.log(this.width,);
     for (let i = 0; i < columns; i++) {
@@ -34,10 +34,9 @@ class Grid {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     this.velocity.y = 0
-    // console.log(this.width + this.position.x, this.canvas.width);
     if (this.position.x + this.width - 7 >= this.canvas.width ||this.position.x <= 0 ) {
-this.velocity.x *= -1 
-this.velocity.y = 30 
+this.velocity.x *= -1 // change direction 
+this.velocity.y = 60 // move down the grid
 
     }
   }

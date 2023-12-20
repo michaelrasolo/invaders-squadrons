@@ -22,11 +22,11 @@ const playerLasers = [];
 // CREATE GRID OF ENEMIES
 const grids = [new Grid(canvas)];
 let frames = 0;
-let randomGridInterval = Math.floor(Math.random() * 500 + 1000);
+let randomGridInterval = Math.floor(Math.random() * 500 + 500);
 
 // ================ ANIMATION FUNCTION ================ //
 function animate() {
-  // console.log(frames);
+  console.log(frames);
   //   CLEAR THE CANVAS
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   requestAnimationFrame(animate);
