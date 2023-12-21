@@ -4,7 +4,7 @@
   /* background-color: black; */
   color: whitesmoke;
   box-sizing: border-box;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -34,4 +34,40 @@ canvas {
   top: 1rem;
   right: 3rem;
   color: white;
+}
+
+.startScreen {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  width: 80vw;
+  border: red solid 1px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+img {
+  height: 60%;
+}
+
+h1 {
+  color: #f1d32a;
+  letter-spacing: 1rem;
+}
+
+#start{
+  width: 30%;
+  height: 10%;
+  color: #f1d32a;
+  background-color: transparent;
+  border: solid 2px #f1d32a;
+  border-radius: 3rem;
+  font-size: 20px;
+
+}
+
+#start:hover{
+  border: solid 2px #f1d32a96;
+color:#f1d32a96
 }

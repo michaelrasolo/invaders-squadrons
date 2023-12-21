@@ -6,8 +6,8 @@ class Grid {
     this.velocity = { x: 3, y: 0 };
     this.enemies = [];
 
-    const rows = Math.ceil(Math.random() * 3)+1;
-    const columns = Math.ceil(Math.random() * 4 + 2);
+    const rows = Math.ceil(Math.random() * 2)+1;
+    const columns = Math.ceil(Math.random() * 5 + 2);
     this.width = (columns * 60)
     // console.log(this.width,);
     for (let i = 0; i < columns; i++) {

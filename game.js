@@ -8,11 +8,15 @@ window.addEventListener("resize", () => {
 });
 const scoreContainer = document.querySelector("#score")
 const highScoreContainer = document.querySelector("#high")
+const startBtn = document.querySelector("#start")
+const startScreen = document.querySelector('.startScreen')
+
 // GAME STATE
 let game = { over: false, active: true };
 let score = 0
 let highScore = localStorage.getItem("invader-highscore") || 0
 highScoreContainer.textContent = highScore;
+
 
 // KEYS STATES
 
@@ -30,7 +34,7 @@ const playerLasers = [];
 // CREATE GRID OF ENEMIES
 const grids = [new Grid(canvas)];
 let frames = 0;
-let randomGridInterval = Math.floor(Math.random() * 500 + 300);
+let randomGridInterval = Math.floor(Math.random() * 300 + 300);
 let gridCreationExecuted = false;
 const enemyLasers = [];
 const particles = [];
@@ -106,7 +110,7 @@ function animate() {
       );
     }
   }
-
+// Background animation
   particles.forEach((particle, i) => {
     if (particle.position.y - particle.radius >= canvas.height) {
       console.log("background");
@@ -233,7 +237,11 @@ function animate() {
   gridCreationExecuted = false;
 }
 
-animate();
+// START THE GAME
+startBtn.addEventListener("click", ()=>{
+  startScreen.style.display = "none";
+animate()
+})
 
 //============= KEY CONTROLLERS =============//
 document.addEventListener("keydown", (event) => {
