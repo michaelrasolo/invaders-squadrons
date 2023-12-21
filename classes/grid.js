@@ -30,7 +30,7 @@ class Grid {
     );
   }
   move() {
-   this.drawBorder()
+  //  this.drawBorder()
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     this.velocity.y = 0

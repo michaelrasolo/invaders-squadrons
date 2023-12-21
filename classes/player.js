@@ -1,7 +1,7 @@
 class Player {
   constructor(canvas) {
-    this.canvas = canvas
-    this.ctx = canvas.getContext("2d")
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
     this.speed = 5;
     this.loaded = false;
     const image = new Image();
@@ -18,10 +18,16 @@ class Player {
       };
     };
     this.rotation = 0;
+    this.opacity = 1;
   }
 
   draw() {
-    this.loaded && this.ctx.drawImage(this.image, this.position.x, this.position.y);
+    this.ctx.save();
+    this.ctx.globalAlpha = this.opacity;
+    this.loaded &&
+      this.ctx.drawImage(this.image, this.position.x, this.position.y);
+
+    this.ctx.restore();
   }
 
   move(direction) {
@@ -37,17 +43,17 @@ class Player {
         if (this.position.x + this.width <= canvas.width) {
           this.position.x += this.speed;
         }
-        break
+        break;
       case "up":
         if (this.position.y >= this.speed) {
           this.position.y -= this.speed;
         }
-        break
+        break;
       case "down":
-        if (this.position.y + this.height +1<= canvas.height) {
+        if (this.position.y + this.height + 1 <= canvas.height) {
           this.position.y += this.speed;
         }
-        break
+        break;
     }
   }
 }

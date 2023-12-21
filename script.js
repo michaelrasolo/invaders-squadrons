@@ -6,6 +6,14 @@ window.addEventListener("resize", () => {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
 });
+const scoreContainer = document.querySelector("#score")
+const highScoreContainer = document.querySelector("#high")
+// GAME STATE
+let game = { over: false, active: true };
+let score = 0
+let highScore = localStorage.getItem("invader-highscore") || 0
+highScoreContainer.textContent = highScore;
+
 // KEYS STATES
 
 let keys = {
@@ -22,10 +30,34 @@ const playerLasers = [];
 // CREATE GRID OF ENEMIES
 const grids = [new Grid(canvas)];
 let frames = 0;
-let randomGridInterval = 300;
-// Math.floor(Math.random() * 500 + 500);
+let randomGridInterval = Math.floor(Math.random() * 500 + 300);
 let gridCreationExecuted = false;
 const enemyLasers = [];
+const particles = [];
+
+// CREATE STAR BACKGROUND
+
+for (let index = 0; index < 50; index++) {
+  particles.push(
+    new Particle(
+      canvas,
+      {
+        position: {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+        },
+      },
+      {
+        velocity: {
+          x: 0,
+          y: 1,
+        },
+      },
+      Math.random() * 2,
+      "white"
+    )
+  );
+}
 
 // ================ ANIMATION FUNCTION ================ //
 function animate() {
@@ -49,6 +81,44 @@ function animate() {
       laser.shoot();
     }
   });
+  // Explosion animation
+  function createExplosion(target, color, fade) {
+    for (let index = 0; index < 15; index++) {
+      particles.push(
+        new Particle(
+          canvas,
+          {
+            position: {
+              x: target.position.x + target.width / 2,
+              y: target.position.y + target.height / 2,
+            },
+          },
+          {
+            velocity: {
+              x: (Math.random() - 0.5) * 2,
+              y: (Math.random() - 0.5) * 2,
+            },
+          },
+          Math.random() * 3,
+          color,
+          fade
+        )
+      );
+    }
+  }
+
+  particles.forEach((particle, i) => {
+    if (particle.position.y - particle.radius >= canvas.height) {
+      console.log("background");
+      particle.position.x = Math.random() * canvas.width;
+      particle.position.y = -particle.radius;
+    }
+    if (particle.opacity <= 0) {
+      setTimeout(() => {
+        particles.splice(i, 1);
+      }, 0);
+    } else particle.update();
+  });
 
   //====   GRID ANIMATION ====//
   // Draw and move enemies grid
@@ -68,6 +138,9 @@ function animate() {
             playerLaser.position.x + 1 >= enemy.position.x && // Right of laser vs left of enemy
             playerLaser.position.x - 1 <= enemy.position.x + enemy.width // Left of laser vs right of enemy
           ) {
+            // Create the explotion
+            createExplosion(enemy, "#d66000", true);
+            console.log(particles);
             setTimeout(() => {
               // Check if enemy & laser to splice are the same
               const enemyFound = grid.enemies.find((enemy2) => {
@@ -80,7 +153,15 @@ function animate() {
               if (playerLaserFound && enemyFound) {
                 grid.enemies.splice(i, 1);
                 playerLasers.splice(j, 1);
+                score += 100
+                scoreContainer.textContent = score
+                if (score > highScore){
+                  highScore = score;
+                  highScoreContainer.textContent = highScore;
+                  localStorage.setItem("invader-highscore", highScore);
 
+                }
+                console.log(score);
                 if (grid.enemies.length > 0) {
                   const firstEnemy = grid.enemies[0];
                   const lastEnemy = grid.enemies[grid.enemies.length - 1];
@@ -134,11 +215,19 @@ function animate() {
       enemyLaser.position.x + 1 >= player.position.x && // Right of laser vs left of enemy
       enemyLaser.position.x - 1 <= player.position.x + player.width // Left of laser vs right of enemy
     ) {
-      console.log("YOU LOSE");
-      return
+      createExplosion(player, "white", true);
+      enemyLasers.splice(index, 1);
+      player.opacity = 0;
+
+      game.over = true;
+      setTimeout(() => {
+        game.active = false;
+      }, 1200);
     }
   });
-
+  if (!game.active) {
+    return;
+  }
   requestAnimationFrame(animate);
   frames++;
   gridCreationExecuted = false;
@@ -195,20 +284,22 @@ document.addEventListener("keydown", (event) => {
 
 // RELEASING THE KEY
 document.addEventListener("keyup", (event) => {
-  switch (event.code) {
-    case "ArrowLeft":
-      keys.left.active = false;
-      break;
-    case "ArrowRight":
-      keys.right.active = false;
-      break;
-    case "ArrowUp":
-      keys.up.active = false;
-      break;
-    case "ArrowDown":
-      keys.down.active = false;
-      break;
-    default:
-      break;
+  if (!game.over) {
+    switch (event.code) {
+      case "ArrowLeft":
+        keys.left.active = false;
+        break;
+      case "ArrowRight":
+        keys.right.active = false;
+        break;
+      case "ArrowUp":
+        keys.up.active = false;
+        break;
+      case "ArrowDown":
+        keys.down.active = false;
+        break;
+      default:
+        break;
+    }
   }
 });

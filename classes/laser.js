@@ -3,7 +3,7 @@ class Laser {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.position = position;
-    this.speed = 1;
+    this.speed = 4;
     this.color = color;
     this.direction = direction;
   }
