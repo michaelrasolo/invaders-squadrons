@@ -1,13 +1,9 @@
-// const redGradient = ctx.createRadialGradient(75, 50, 5, 90, 60, 100);
-//     redGradient.addColorStop(0, "fb8429");
-//     redGradient.addColorStop(1, "d3181b");
-
 class Laser {
   constructor(canvas, { position }, color, direction) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.position = position;
-    this.speed = 8;
+    this.speed = 1;
     this.color = color;
     this.direction = direction;
   }
@@ -20,7 +16,7 @@ class Laser {
     this.ctx.lineTo(this.position.x, this.position.y - 10);
     this.ctx.lineWidth = 3;
     // Color condition
-    this.ctx.strokeStyle = "red";
+    this.ctx.strokeStyle = this.color;
 
     this.ctx.stroke();
     this.ctx.closePath();

@@ -9,7 +9,7 @@ class Grid {
     const rows = Math.ceil(Math.random() * 3)+1;
     const columns = Math.ceil(Math.random() * 4 + 2);
     this.width = (columns * 60)
-    console.log(this.width,);
+    // console.log(this.width,);
     for (let i = 0; i < columns; i++) {
       for (let j = 0; j < rows; j++) {
         this.enemies.push(

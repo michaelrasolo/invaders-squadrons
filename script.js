@@ -22,14 +22,16 @@ const playerLasers = [];
 // CREATE GRID OF ENEMIES
 const grids = [new Grid(canvas)];
 let frames = 0;
-let randomGridInterval = Math.floor(Math.random() * 500 + 500);
+let randomGridInterval = 300;
+// Math.floor(Math.random() * 500 + 500);
+let gridCreationExecuted = false;
+const enemyLasers = [];
 
 // ================ ANIMATION FUNCTION ================ //
 function animate() {
-  console.log(frames);
+  // console.log(frames);
   //   CLEAR THE CANVAS
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  requestAnimationFrame(animate);
   //====   PLAYER ANIMATION ====//
   //   Draw and move Player
   for (const direction in keys) {
@@ -52,7 +54,6 @@ function animate() {
   // Draw and move enemies grid
   grids.forEach((grid, gridIndex) => {
     const allEnemiesLoaded = grid.enemies.every((enemy) => enemy.loaded);
-
     if (allEnemiesLoaded) {
       grid.enemies.forEach((enemy, i) => {
         enemy.draw();
@@ -90,9 +91,10 @@ function animate() {
                     lastEnemy.width;
 
                   grid.position.x = firstEnemy.position.x;
-                } else {
-                  grids.splice(gridIndex, 1);
                 }
+                // else {
+                //   grids.splice(gridIndex, 1);
+                // }
               }
             }, 0);
           }
@@ -100,12 +102,46 @@ function animate() {
       });
 
       grid.move();
+      // Enemy shooting
+      if (frames % 100 === 0 && grid.enemies.length > 0) {
+        grid.enemies[Math.floor(Math.random() * grid.enemies.length)].shoot(
+          enemyLasers
+        );
+      }
     }
-    if (frames % randomGridInterval === 0 && frames != 0) {
+    if (
+      frames % randomGridInterval === 0 &&
+      frames != 0 &&
+      !gridCreationExecuted
+    ) {
+      console.log("Request new grid at", frames);
+
       grids.push(new Grid(canvas));
+      gridCreationExecuted = true;
     }
   });
+
+  // Enemy shooting animation
+  enemyLasers.forEach((enemyLaser, index) => {
+    if (enemyLaser.position.y > canvas.height) {
+      enemyLasers.splice(index, 1);
+    } else enemyLaser.shoot();
+    // Enemy laser touching player
+    if (
+      // Y axis
+      enemyLaser.position.y >= player.position.y && // Bottom laser vs front player
+      // X axis
+      enemyLaser.position.x + 1 >= player.position.x && // Right of laser vs left of enemy
+      enemyLaser.position.x - 1 <= player.position.x + player.width // Left of laser vs right of enemy
+    ) {
+      console.log("YOU LOSE");
+      return
+    }
+  });
+
+  requestAnimationFrame(animate);
   frames++;
+  gridCreationExecuted = false;
 }
 
 animate();

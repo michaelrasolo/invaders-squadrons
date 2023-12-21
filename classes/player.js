@@ -26,7 +26,7 @@ class Player {
 
   move(direction) {
     if (!this.position) return;
-    console.log(direction);
+    // console.log(direction);
     switch (direction) {
       case "left":
         if (this.position.x >= this.speed) {

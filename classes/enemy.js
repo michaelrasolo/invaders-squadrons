@@ -1,5 +1,5 @@
 class Enemy {
-  constructor(canvas,{position}) {
+  constructor(canvas, { position }) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.velocity = {
@@ -27,7 +27,35 @@ class Enemy {
   }
   move(velocity) {
     if (!this.image || !this.position) return;
-this.position.x += velocity.x
-this.position.y += velocity.y
+    this.position.x += velocity.x;
+    this.position.y += velocity.y;
+  }
+  shoot(enemyLasers) {
+    enemyLasers.push(
+      new Laser(
+        canvas,
+        {
+          position: {
+            x: this.position.x +4,
+            y: this.position.y + this.height,
+          },
+        },
+        "green",
+        "down"
+      )
+    );
+    enemyLasers.push(
+      new Laser(
+        canvas,
+        {
+          position: {
+            x: this.position.x + this.width -4,
+            y: this.position.y + this.height,
+          },
+        },
+        "green",
+        "down"
+      )
+    );
   }
 }
