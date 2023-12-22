@@ -6,18 +6,18 @@ window.addEventListener("resize", () => {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
 });
-const scoreContainer = document.querySelector("#score")
-const highScoreContainer = document.querySelector("#high")
-const startBtn = document.querySelector("#start")
-const startScreen = document.querySelector('.startScreen')
+const scoreContainer = document.querySelector("#score");
+const highScoreContainer = document.querySelector("#high");
+const startBtn = document.querySelector("#start");
+const startScreen = document.querySelector(".startScreen");
 
 // GAME STATE
 let game = { over: false, active: true };
-let score = 0
-let highScore = localStorage.getItem("invader-highscore") || 0
+let score = 0;
+let highScore = localStorage.getItem("invader-highscore") || 0;
 highScoreContainer.textContent = highScore;
-
-
+let lastFrameTime = 0;
+const targetFrameDuration = 1000 / 60; // 60 FPS
 // KEYS STATES
 
 let keys = {
@@ -65,8 +65,12 @@ for (let index = 0; index < 50; index++) {
 
 // ================ ANIMATION FUNCTION ================ //
 function animate() {
-  // console.log(frames);
-  //   CLEAR THE CANVAS
+  const now = performance.now();
+  const elapsedTime = now - lastFrameTime;
+  // Only proceed if enough time has elapsed since the last frame
+  if (elapsedTime >= targetFrameDuration){
+    lastFrameTime = now;
+    //   CLEAR THE CANVAS
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   //====   PLAYER ANIMATION ====//
   //   Draw and move Player
@@ -110,10 +114,10 @@ function animate() {
       );
     }
   }
-// Background animation
+  // Background animation
   particles.forEach((particle, i) => {
     if (particle.position.y - particle.radius >= canvas.height) {
-      console.log("background");
+      // console.log("background");
       particle.position.x = Math.random() * canvas.width;
       particle.position.y = -particle.radius;
     }
@@ -144,7 +148,7 @@ function animate() {
           ) {
             // Create the explotion
             createExplosion(enemy, "#d66000", true);
-            console.log(particles);
+            // console.log(particles);
             setTimeout(() => {
               // Check if enemy & laser to splice are the same
               const enemyFound = grid.enemies.find((enemy2) => {
@@ -157,15 +161,14 @@ function animate() {
               if (playerLaserFound && enemyFound) {
                 grid.enemies.splice(i, 1);
                 playerLasers.splice(j, 1);
-                score += 100
-                scoreContainer.textContent = score
-                if (score > highScore){
+                score += 100;
+                scoreContainer.textContent = score;
+                if (score > highScore) {
                   highScore = score;
                   highScoreContainer.textContent = highScore;
                   localStorage.setItem("invader-highscore", highScore);
-
                 }
-                console.log(score);
+                // console.log(score);
                 if (grid.enemies.length > 0) {
                   const firstEnemy = grid.enemies[0];
                   const lastEnemy = grid.enemies[grid.enemies.length - 1];
@@ -199,7 +202,7 @@ function animate() {
       frames != 0 &&
       !gridCreationExecuted
     ) {
-      console.log("Request new grid at", frames);
+      // console.log("Request new grid at", frames);
 
       grids.push(new Grid(canvas));
       gridCreationExecuted = true;
@@ -231,17 +234,17 @@ function animate() {
   });
   if (!game.active) {
     return;
-  }
+  }}
   requestAnimationFrame(animate);
   frames++;
   gridCreationExecuted = false;
 }
 
 // START THE GAME
-startBtn.addEventListener("click", ()=>{
-  startScreen.classList.add('hidden');
-  animate()
-})
+startBtn.addEventListener("click", () => {
+  startScreen.classList.add("hidden");
+  animate();
+});
 
 //============= KEY CONTROLLERS =============//
 document.addEventListener("keydown", (event) => {

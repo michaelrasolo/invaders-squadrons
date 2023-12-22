@@ -45,12 +45,12 @@ canvas {
   /* border: red solid 1px; */
   align-items: center;
   justify-content: space-around;
-  opacity: 1; /* Initial opacity */
-  transition: opacity 1s ease-out; /* Transition property */
+  opacity: 1; 
+  transition: opacity 1s ease;
 }
 .startScreen.hidden {
-  opacity: 0; /* Set opacity to 0 when hidden */
-  pointer-events: none; /* Disable pointer events to prevent interaction when hidden */
+  opacity: 0; 
+  pointer-events: none;
 }
 img {
   height: 60%;
