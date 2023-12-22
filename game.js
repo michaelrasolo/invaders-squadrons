@@ -239,8 +239,8 @@ function animate() {
 
 // START THE GAME
 startBtn.addEventListener("click", ()=>{
-  startScreen.style.display = "none";
-animate()
+  startScreen.classList.add('hidden');
+  animate()
 })
 
 //============= KEY CONTROLLERS =============//

@@ -42,11 +42,16 @@ canvas {
   flex-direction: column;
   height: 70vh;
   width: 80vw;
-  border: red solid 1px;
+  /* border: red solid 1px; */
   align-items: center;
   justify-content: space-around;
+  opacity: 1; /* Initial opacity */
+  transition: opacity 1s ease-out; /* Transition property */
 }
-
+.startScreen.hidden {
+  opacity: 0; /* Set opacity to 0 when hidden */
+  pointer-events: none; /* Disable pointer events to prevent interaction when hidden */
+}
 img {
   height: 60%;
 }
